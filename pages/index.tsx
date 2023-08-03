@@ -1,21 +1,19 @@
 import useSWR from 'swr'
-import PersonComponent from '../components/Person'
-import type { Person } from '../interfaces'
+import SocietyComponent from '../components/Society'
+import type { Society } from '../interfaces'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function Index() {
-  const { data, error, isLoading } = useSWR<Person[]>('/api/people', fetcher)
+  const { data, error, isLoading } = useSWR<Society[]>('/api/society', fetcher)
 
   if (error) return <div>Failed to load</div>
   if (isLoading) return <div>Loading...</div>
   if (!data) return null
 
   return (
-    <ul>
-      {data.map((p) => (
-        <PersonComponent key={p.id} person={p} />
-      ))}
-    </ul>
+    <div>
+      Why are you here
+    </div>
   )
 }

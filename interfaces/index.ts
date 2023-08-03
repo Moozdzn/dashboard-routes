@@ -1,12 +1,6 @@
-export type Person = {
-  id: string
+export type Society = {
   name: string
-  height: string
-  mass: string
-  hair_color: string
-  skin_color: string
-  eye_color: string
-  gender: string
+  funds: number
 }
 
 export type ResponseError = {
