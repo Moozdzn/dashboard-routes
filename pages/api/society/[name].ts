@@ -11,7 +11,7 @@ export default async function dashboardHandler(
   const { query } = req
   const { name } = query
 
-  const pool = await getDatabaseSSH('EN-pub')
+  const pool = await getDatabaseSSH()
   const society: Society | ResponseError = await new Promise((resolve, reject)  => {
     pool.query(`SELECT * FROM society_employee_statistics WHERE society = '${name}'`, (err, result) => {
       if (err) return reject(err)

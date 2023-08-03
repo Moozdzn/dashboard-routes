@@ -11,7 +11,7 @@ export default async function dashboardHandler(
   const { query } = req;
   const { name, from, to } = query;
 
-  const pool = await getDatabaseSSH('EN-pub');
+  const pool = await getDatabaseSSH();
 
   let query_string = `SELECT type, message, DATE_FORMAT(timestamp, '%Y-%m-%d %H:%i:%s') as date FROM society_logs WHERE society = '${name}'`;
 
