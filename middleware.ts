@@ -5,7 +5,9 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
     const userAgent = request.headers.get('user-agent')
     const secretToken = request.headers.get('secret-token')
-    
+
+    console.log('user agent', userAgent)
+    console.log('secret token', secretToken)
     //if secret token is not present, return 401
     if (!secretToken) {
         console.log('no secret token')

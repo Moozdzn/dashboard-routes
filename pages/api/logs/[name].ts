@@ -41,6 +41,6 @@ export default async function dashboardHandler(
   return res
     .status(200)
     .json({
-      link: `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/download/${id}.csv`,
+      link: `/api/download/${id}.csv`,
     });
 }
