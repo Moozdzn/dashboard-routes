@@ -8,10 +8,9 @@ export default async function dashboardHandler(
   res: NextApiResponse<{link: string}>
 ) {
   const { query } = req
-  const { name } = query
-  const svTag = req.headers['server-tag'] as string;
+  const { name, svtag } = query
   
-  const pool = await getDatabase(svTag)
+  const pool = await getDatabase(svtag as string)
   const society = await new Promise((resolve, reject)  => {
     pool.query(`SELECT * FROM society_employee_statistics WHERE society = '${name}'`, (err, result) => {
       if (err) return reject(err)

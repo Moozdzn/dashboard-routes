@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import type { Society, ResponseError } from "../../../interfaces";
 import { getDatabase } from "../../../lib/db";
 import ObjectsToCsv from "objects-to-csv";
 import { uid } from "uid";
@@ -9,10 +8,10 @@ export default async function dashboardHandler(
   res: NextApiResponse<{ link: string }>
 ) {
   const { query } = req;
-  const { name, from, to } = query;
-  const svTag = req.headers['sv-tag'] as string;
+  const { name, from, to, svtag } = query;
 
-  const pool = await getDatabase(svTag)
+  const pool = await getDatabase(svtag as string)
+
   let query_string = `SELECT type, message, DATE_FORMAT(timestamp, '%Y-%m-%d %H:%i:%s') as date FROM society_logs WHERE society = '${name}'`;
 
   const validFrom = Number(from)
