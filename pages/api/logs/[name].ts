@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import type { Society, ResponseError } from "../../../interfaces";
-import { getDatabaseSSH } from "../../../lib/db";
+import { getDatabase } from "../../../lib/db";
 import ObjectsToCsv from "objects-to-csv";
 import { uid } from "uid";
 
@@ -10,8 +10,9 @@ export default async function dashboardHandler(
 ) {
   const { query } = req;
   const { name, from, to } = query;
+  const svTag = req.headers['sv-tag'] as string;
 
-  const pool = await getDatabaseSSH();
+  const pool = await getDatabase(svTag)
 
   let query_string = `SELECT type, message, DATE_FORMAT(timestamp, '%Y-%m-%d %H:%i:%s') as date FROM society_logs WHERE society = '${name}'`;
 

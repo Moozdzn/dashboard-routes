@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import type { Society, ResponseError } from '../../../interfaces'
-import { getDatabaseSSH } from '../../../lib/db'
+import { getDatabase } from '../../../lib/db'
 import ObjectsToCsv from 'objects-to-csv'
 import { uid } from 'uid';
 
@@ -10,8 +10,9 @@ export default async function dashboardHandler(
 ) {
   const { query } = req
   const { name } = query
-
-  const pool = await getDatabaseSSH()
+  const svTag = req.headers['server-tag'] as string;
+  
+  const pool = await getDatabase(svTag)
   const society: Society | ResponseError = await new Promise((resolve, reject)  => {
     pool.query(`SELECT * FROM society_employee_statistics WHERE society = '${name}'`, (err, result) => {
       if (err) return reject(err)

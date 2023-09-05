@@ -5,22 +5,27 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
     const userAgent = request.headers.get('user-agent')
     const secretToken = request.headers.get('secret-token')
+    const svTag = request.headers.get('server-tag')
 
     console.log('user agent', userAgent)
     console.log('secret token', secretToken)
-    //if secret token is not present, return 401
     if (!secretToken) {
         console.log('no secret token')
         return NextResponse.json({code: 401, message:'Unauthorized'})
     }
 
-    //if secret token is not correct, return 403
     if (secretToken !== process.env.SECRET_TOKEN) {
         console.log('wrong secret token')
         return NextResponse.json({code: 403, message:'Forbidden'})
     }
+    // pass the svtag to the response
+    return NextResponse.next({
+        headers: {
+            'server-tag': svTag
+        }
+    })
 
-    return NextResponse.next()
+    //return NextResponse.next()
 }
  
 // See "Matching Paths" below to learn more
