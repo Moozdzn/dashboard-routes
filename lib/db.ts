@@ -1,4 +1,4 @@
-import mysql from "mysql2";
+import { createPool } from "mysql2";
 const Client = require("ssh2").Client;
 
 const SV_TAGS: Record<string, {ssh?: any, db: any}> = {
@@ -41,8 +41,6 @@ const pools = {};
 
 const ssh = new Client();
 
-const createPool = (options, stream = null) => mysql.createPool(Object.assign(options, { stream }));
-
 const database = (svtag: keyof typeof SV_TAGS) =>
   new Promise((resolve, reject) => {
     if (SV_TAGS[svtag].ssh) {
@@ -60,7 +58,7 @@ const database = (svtag: keyof typeof SV_TAGS) =>
                 if (err) return reject(err);
 
                 try {
-                    const pool = createPool(SV_TAGS[svtag].db, stream);
+                    const pool = createPool(Object.assign(SV_TAGS[svtag].db, {stream}));
                     return resolve(pool);
                 } catch (e) {
                     return reject(e);
