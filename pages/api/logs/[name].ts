@@ -3,7 +3,6 @@ import type { Society, ResponseError } from "../../../interfaces";
 import { getDatabase } from "../../../lib/db";
 import ObjectsToCsv from "objects-to-csv";
 import { uid } from "uid";
-import type { Pool } from "mysql2";
 
 export default async function dashboardHandler(
   req: NextApiRequest,
@@ -13,8 +12,7 @@ export default async function dashboardHandler(
   const { name, from, to } = query;
   const svTag = req.headers['sv-tag'] as string;
 
-  const pool: Pool = await getDatabase(svTag)
-
+  const pool = await getDatabase(svTag)
   let query_string = `SELECT type, message, DATE_FORMAT(timestamp, '%Y-%m-%d %H:%i:%s') as date FROM society_logs WHERE society = '${name}'`;
 
   const validFrom = Number(from)
