@@ -4,7 +4,6 @@ import ObjectsToCsv from "objects-to-csv";
 import ms from "ms";
 import type { RowDataPacket } from "mysql2";
 import { AliveFiles } from "../../../lib/cache";
-import path from "node:path";
 import { formatCSVPath } from "../../../lib/path";
 
 interface Role {
@@ -121,7 +120,9 @@ export default async function dashboardHandler(req: NextApiRequest, res: NextApi
 			}
 		}
 
-		new ObjectsToCsv(society).toDisk(formatCSVPath(name));
+    const csv = new ObjectsToCsv(society);
+
+		await csv.toDisk(formatCSVPath(name));
 
 		AliveFiles.set(name, Date.now() + 1000 * 60 * 60 );
     console.log(`${name} has been cached`);

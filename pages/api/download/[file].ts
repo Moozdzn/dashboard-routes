@@ -41,7 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 			access(filePath, constants.F_OK, (err) => {
 				if (err) return console.log(err);
 
-				AliveFiles.delete(fileName);
+				AliveFiles.delete(fileName); 
 
 				unlink(filePath, (err) => {
 					if (err) return console.log(err);
