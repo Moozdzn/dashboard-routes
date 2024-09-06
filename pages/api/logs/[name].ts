@@ -3,6 +3,7 @@ import ObjectsToCsv from "objects-to-csv";
 import { uid } from "uid";
 import { getPoolConnection } from "../../../lib/db";
 import { AliveFiles } from "../../../lib/cache";
+import { formatCSVPath } from "../../../lib/path";
 
 export default async function dashboardHandler(
   req: NextApiRequest,
@@ -32,7 +33,7 @@ export default async function dashboardHandler(
 
   const id = uid();
 
-  new ObjectsToCsv(society).toDisk(`./${key}.csv`);
+  new ObjectsToCsv(society).toDisk(formatCSVPath(key));
 
   AliveFiles.set(key, Date.now() + 1000 * 60 * 60) 
 

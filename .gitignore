@@ -50,3 +50,5 @@ local
 
 # vercel
 .vercel
+
+temp/*.csv
