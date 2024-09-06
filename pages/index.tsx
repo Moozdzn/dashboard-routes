@@ -1,5 +1,4 @@
 import useSWR from 'swr'
-import SocietyComponent from '../components/Society'
 import type { Society } from '../interfaces'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())

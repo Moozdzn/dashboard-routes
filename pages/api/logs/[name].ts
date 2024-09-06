@@ -1,16 +1,19 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { getDatabase } from "../../../lib/db";
+import type { NextApiRequest, NextApiResponse } from "next";
 import ObjectsToCsv from "objects-to-csv";
 import { uid } from "uid";
+import { getPoolConnection } from "../../../lib/db";
+import { AliveFiles } from "../../../lib/cache";
 
 export default async function dashboardHandler(
   req: NextApiRequest,
   res: NextApiResponse<{ link: string }>
 ) {
   const { query } = req;
-  const { name, from, to, svtag } = query;
+  const { name, from, to, svtag } = query as { name: string; from: string; to: string; svtag: string };
 
-  const pool = await getDatabase(svtag as string)
+  const key = `log-${name}-${from}-${to}`;
+
+  const conn = await getPoolConnection();
 
   let query_string = `SELECT type, message, DATE_FORMAT(timestamp, '%Y-%m-%d %H:%i:%s') as date FROM society_logs WHERE society = '${name}'`;
 
@@ -24,22 +27,16 @@ export default async function dashboardHandler(
     query_string += ` AND timestamp < '${new Date(validTo).toISOString().slice(0, 19).replace('T', ' ')}'`;
   }
 
-  const society = await new Promise(
-    (resolve, reject) => {
-      pool.query(query_string, (err, result) => {
-        if (err) return reject(err);
-        return resolve(result);
-      });
-    }
-  );
+  const [society] = await conn.query(query_string);
+  conn.release()
 
   const id = uid();
 
-  new ObjectsToCsv(society).toDisk(`./${id}.csv`);
+  new ObjectsToCsv(society).toDisk(`./${key}.csv`);
 
-  return res
-    .status(200)
-    .json({
-      link: `/api/download/${id}.csv`,
-    });
+  AliveFiles.set(key, Date.now() + 1000 * 60 * 60) 
+
+  return res.status(200).json({
+		link: `/api/download/${key}.csv`,
+  });
 }
