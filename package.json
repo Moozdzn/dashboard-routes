@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "serve": "pm2 start npm --name dashboard -- start"
   },
   "dependencies": {
     "ms": "^2.1.3",
