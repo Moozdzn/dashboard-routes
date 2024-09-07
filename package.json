@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3002",
     "serve": "pm2 start npm --name dashboard -- start"
   },
   "dependencies": {
